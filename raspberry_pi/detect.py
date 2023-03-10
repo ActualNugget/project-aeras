@@ -20,10 +20,25 @@ import cv2
 from tflite_support.task import core
 from tflite_support.task import processor
 from tflite_support.task import vision
-import utils
 import RPi.GPIO as GPIO
 
-GPIO.setmode(GPIO.BCM)
+# Setup fan pins
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup((32,33), GPIO.OUT) # 32 = rb5, 33 = lb4
+fan1 = GPIO.PWM(32,25000)
+fan1.start(0)
+fan2 = GPIO.PWM(33,25000)
+fan2.start(0)
+
+print(type(0))
+print(type(fan1))
+def fan(name, speed: int):
+    if speed == 0:
+        name.ChangeDutyCycle(0)
+    elif speed == 1:
+        name.ChangeDutyCycle(10)
+    elif speed == 2:
+        name.ChangeDutyCycle(100)
 
 
 def run(model: str, camera_id: int, width: int, height: int, num_threads: int,
@@ -71,6 +86,12 @@ def run(model: str, camera_id: int, width: int, height: int, num_threads: int,
 
     # Run object detection estimation using the model.
     detection_result = detector.detect(input_tensor)
+    names = []
+    for detection in detection_result.detections:
+        category_name = detection.categories[0].category_name
+        names.append(category_name)
+    print(names)
+    # Find all the people
 
   cap.release()
 
