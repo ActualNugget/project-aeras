@@ -21,25 +21,7 @@ from tflite_support.task import core
 from tflite_support.task import processor
 from tflite_support.task import vision
 import utils
-import RPi.GPIO as GPIO
 
-# Setup fan pins
-GPIO.setmode(GPIO.BOARD)
-GPIO.setup((32,33), GPIO.OUT) # 32 = rb5, 33 = lb4
-fan0 = GPIO.PWM(32,25000)
-fan0.start(0)
-fan1 = GPIO.PWM(33,25000)
-fan1.start(0)
-
-room_boundary = 200 # y-coordinate of room boundary
-
-def fan(name, speed: int):
-    if speed == 0:
-        name.ChangeDutyCycle(0)
-    elif speed == 1:
-        name.ChangeDutyCycle(10)
-    elif speed > 1:
-        name.ChangeDutyCycle(100)
 
 def run(model: str, camera_id: int, width: int, height: int, num_threads: int,
         enable_edgetpu: bool) -> None:
@@ -75,7 +57,7 @@ def run(model: str, camera_id: int, width: int, height: int, num_threads: int,
   base_options = core.BaseOptions(
       file_name=model, use_coral=enable_edgetpu, num_threads=num_threads)
   detection_options = processor.DetectionOptions(
-      max_results=5, score_threshold=0.3)
+      max_results=3, score_threshold=0.3)
   options = vision.ObjectDetectorOptions(
       base_options=base_options, detection_options=detection_options)
   detector = vision.ObjectDetector.create_from_options(options)
@@ -89,7 +71,7 @@ def run(model: str, camera_id: int, width: int, height: int, num_threads: int,
       )
 
     counter += 1
-    image = cv2.flip(image, -1)
+    image = cv2.flip(image, 1)
 
     # Convert the image from BGR to RGB as required by the TFLite model.
     rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
@@ -100,26 +82,8 @@ def run(model: str, camera_id: int, width: int, height: int, num_threads: int,
     # Run object detection estimation using the model.
     detection_result = detector.detect(input_tensor)
 
-    # Find people
-    names = []
-    counts = [0, 0]
-    for detection in detection_result.detections:
-      category_name=detection.categories[0].category_name
-      names.append(category_name)
-      if category_name == "person":
-        print((detection.bounding_box.origin_x, detection.bounding_box.origin_y))
-        if detection.bounding_box.origin_y < room_boundary:
-          counts[0] += 1
-        else:
-          counts[1] += 1
-    print(names)
-    fan(fan0, counts[0])
-    fan(fan1, counts[1])
     # Draw keypoints and edges on input image
     image = utils.visualize(image, detection_result)
-
-    # Draw room boundary cv2.line(image, start_point, end_point, color, thickness)
-    image = cv2.line(image, (0, room_boundary), (640, room_boundary), (0, 255, 0), 5)
 
     # Calculate the FPS
     if counter % fps_avg_frame_count == 0:
@@ -183,8 +147,4 @@ def main():
 
 
 if __name__ == '__main__':
-  try:
-    main()
-  finally:
-    GPIO.cleanup()
-    print("Cleaned up!")
+  main()
