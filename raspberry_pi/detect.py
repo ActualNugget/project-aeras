@@ -31,14 +31,12 @@ fan1.start(0)
 fan2 = GPIO.PWM(33,25000)
 fan2.start(0)
 
-print(type(0))
-print(type(fan1))
 def fan(name, speed: int):
     if speed == 0:
         name.ChangeDutyCycle(0)
     elif speed == 1:
         name.ChangeDutyCycle(10)
-    elif speed == 2:
+    elif speed > 1:
         name.ChangeDutyCycle(100)
 
 def run(model: str, camera_id: int, width: int, height: int, num_threads: int,
@@ -100,6 +98,22 @@ def run(model: str, camera_id: int, width: int, height: int, num_threads: int,
     # Run object detection estimation using the model.
     detection_result = detector.detect(input_tensor)
 
+    # Find people
+    names = []
+    counts = [0, 0]
+    for detection in detection_result.detections:
+      category_name=detection.categories[0].category_name
+      names.append(category_name)
+      if category_name == "person":
+        print((detection.bounding_box.origin_x, detection.bounding_box.origin_y))
+        if detection.bounding_box.origin_y < 200:
+          counts[0] += 1
+        else:
+          counts[1] += 1
+    print(names)
+    fan(fan1, counts[0])
+    fan(fan2, counts[1])
+    time.sleep(5)
     # Draw keypoints and edges on input image
     image = utils.visualize(image, detection_result)
 
