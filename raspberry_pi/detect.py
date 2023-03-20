@@ -20,7 +20,7 @@ import cv2
 from tflite_support.task import core
 from tflite_support.task import processor
 from tflite_support.task import vision
-import utils
+import utils, weather
 import RPi.GPIO as GPIO
 
 # Setup fan pins
@@ -32,14 +32,22 @@ fan1 = GPIO.PWM(33,25000)
 fan1.start(0)
 
 room_boundary = 320 # x-coordinate of room boundary
-
+rainy = bool(weather.rainfall())
 def fan(name, speed: int):
-    if speed == 0:
-        name.ChangeDutyCycle(0)
-    elif speed == 1:
-        name.ChangeDutyCycle(10)
-    elif speed > 1:
-        name.ChangeDutyCycle(100)
+    if rainy: 
+      if speed == 0:
+          name.ChangeDutyCycle(0)
+      elif speed == 1:
+          name.ChangeDutyCycle(5)
+      elif speed > 1:
+          name.ChangeDutyCycle(50)
+    else: 
+      if speed == 0:
+          name.ChangeDutyCycle(0)
+      elif speed == 1:
+          name.ChangeDutyCycle(10)
+      elif speed > 1:
+          name.ChangeDutyCycle(100)
 
 def run(model: str, camera_id: int, width: int, height: int, num_threads: int,
         enable_edgetpu: bool) -> None:
