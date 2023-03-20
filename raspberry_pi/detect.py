@@ -31,7 +31,7 @@ fan0.start(0)
 fan1 = GPIO.PWM(33,25000)
 fan1.start(0)
 
-room_boundary = 200 # y-coordinate of room boundary
+room_boundary = 320 # x-coordinate of room boundary
 
 def fan(name, speed: int):
     if speed == 0:
@@ -75,7 +75,7 @@ def run(model: str, camera_id: int, width: int, height: int, num_threads: int,
   base_options = core.BaseOptions(
       file_name=model, use_coral=enable_edgetpu, num_threads=num_threads)
   detection_options = processor.DetectionOptions(
-      max_results=5, score_threshold=0.3)
+      max_results=5, score_threshold=0.2)
   options = vision.ObjectDetectorOptions(
       base_options=base_options, detection_options=detection_options)
   detector = vision.ObjectDetector.create_from_options(options)
@@ -108,18 +108,19 @@ def run(model: str, camera_id: int, width: int, height: int, num_threads: int,
       names.append(category_name)
       if category_name == "person":
         print((detection.bounding_box.origin_x, detection.bounding_box.origin_y))
-        if detection.bounding_box.origin_y < room_boundary:
+        if detection.bounding_box.origin_x < room_boundary:
           counts[0] += 1
         else:
           counts[1] += 1
     print(names)
+    print("Speeds: ", counts)
     fan(fan0, counts[0])
     fan(fan1, counts[1])
     # Draw keypoints and edges on input image
     image = utils.visualize(image, detection_result)
 
     # Draw room boundary cv2.line(image, start_point, end_point, color, thickness)
-    image = cv2.line(image, (0, room_boundary), (640, room_boundary), (0, 255, 0), 5)
+    image = cv2.line(image, (room_boundary, 0), (room_boundary, 480), (0, 255, 0), 5)
 
     # Calculate the FPS
     if counter % fps_avg_frame_count == 0:
