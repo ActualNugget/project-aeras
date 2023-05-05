@@ -4,7 +4,7 @@ import RPi.GPIO as GPIO
 try:
     GPIO.setmode(GPIO.BCM)
     hx711 = HX711(
-        dout_pin=5,
+        dout_pin=13,
         pd_sck_pin=6,
         channel='A',
         gain=64
