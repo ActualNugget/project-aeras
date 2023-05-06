@@ -63,6 +63,8 @@ try:
         delta = lift_pax_new - lift_pax
         lift_pax = lift_pax_new
         level_pax[level] -= delta
+        if level_pax[level] < 0:
+                level_pax[level] = 0
         # print(lift_pax, "delta: ", delta)
         print("Levels:", level_pax)
     GPIO.setup(lift_close_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
@@ -90,6 +92,8 @@ try:
         elif exit < 7:
             level_pax[1] -= 1
             print("Carpark: -1")
+            if level_pax[1] < 0:
+                level_pax[1] = 0
             time.sleep(1)
         # print(carpark)
 
