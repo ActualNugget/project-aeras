@@ -50,6 +50,10 @@ try:
     GPIO.add_event_detect(lift_down_pin, GPIO.RISING, callback=lift_down, bouncetime=200)
 
     # Lift Close
+    def lift_close(channel):
+        global level
+        readings = take_reading()
+        pax = weight_to_people(readings)
     GPIO.setup(lift_close_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
     GPIO.add_event_detect(lift_close_pin,GPIO.RISING,callback=lift_close, bouncetime=200)
 
