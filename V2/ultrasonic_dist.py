@@ -52,25 +52,25 @@ def distance(GPIO_TRIGGER, GPIO_ECHO):
  
     return distance
  
-try:
-    count = 0
-    while True:
-        exit = distance(trigger_pin_1, echo_pin_1)
-        entry = distance(trigger_pin_2, echo_pin_2)
-        print ("Entry = %.1f cm" % entry)
-        print ("Exit = %.1f cm" % exit)
+# try:
+#     count = 0
+#     while True:
+#         exit = distance(trigger_pin_1, echo_pin_1)
+#         entry = distance(trigger_pin_2, echo_pin_2)
+#         # print ("Entry = %.1f cm" % entry)
+#         # print ("Exit = %.1f cm" % exit)
 
-        if entry < 7:
-            count += 1
-            time.sleep(1)
-        elif exit < 7:
-            count -= 1
-            time.sleep(1)
-        print(count)
+#         if entry < 7:
+#             count += 1
+#             time.sleep(1)
+#         elif exit < 7:
+#             count -= 1
+#             time.sleep(1)
+#         print(count)
 
-        time.sleep(0.1)
+#         time.sleep(0.1)
 
-    # Reset by pressing CTRL + C
-except KeyboardInterrupt:
-    print("Measurement stopped by User")
-    GPIO.cleanup()
+#     # Reset by pressing CTRL + C
+# except KeyboardInterrupt:
+#     print("Measurement stopped by User")
+#     GPIO.cleanup()

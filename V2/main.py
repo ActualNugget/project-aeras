@@ -33,6 +33,8 @@ carpark = 0
 lift_pax = 0
 
 try:
+    GPIO.setmode(GPIO.BCM)
+    led_function(level)
     # Lift Up
     def lift_up(channel):
         global level
@@ -58,6 +60,7 @@ try:
         global level, lift_pax
         readings = take_reading()
         lift_pax = weight_to_people(readings)
+        print(lift_pax)
     GPIO.setup(lift_close_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
     GPIO.add_event_detect(lift_close_pin,GPIO.RISING,callback=lift_close, bouncetime=200)
 
@@ -73,8 +76,8 @@ try:
         # Carpark Counter
         exit = distance(trigger_pin_1, echo_pin_1)
         entry = distance(trigger_pin_2, echo_pin_2)
-        print ("Entry = %.1f cm" % entry)
-        print ("Exit = %.1f cm" % exit)
+        # print ("Entry = %.1f cm" % entry)
+        # print ("Exit = %.1f cm" % exit)
 
         if entry < 7:
             carpark += 1
