@@ -30,7 +30,6 @@ echo_pin_2 = 2
 
 # Init counters
 level = 1
-carpark = 0
 lift_pax = 0
 level_pax = defaultdict(lambda: 0)
 
