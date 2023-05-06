@@ -4,9 +4,11 @@
 
 
 import RPi.GPIO as GPIO
+import time
 from led_function import led_function
 from weight_sensor import take_reading
 from weight_analysis import weight_to_people
+from ultrasonic_dist import distance
 
 # GPIO Setup
 GPIO.setmode(GPIO.BCM)
@@ -27,6 +29,8 @@ echo_pin_2 = 2
 
 # Init counters
 level = 1
+carpark = 0
+lift_pax = 0
 
 try:
     # Lift Up
@@ -51,9 +55,9 @@ try:
 
     # Lift Close
     def lift_close(channel):
-        global level
+        global level, lift_pax
         readings = take_reading()
-        pax = weight_to_people(readings)
+        lift_pax = weight_to_people(readings)
     GPIO.setup(lift_close_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
     GPIO.add_event_detect(lift_close_pin,GPIO.RISING,callback=lift_close, bouncetime=200)
 
@@ -63,6 +67,25 @@ try:
     GPIO.setup(echo_pin_1, GPIO.IN)
     GPIO.setup(echo_pin_2, GPIO.IN)
 
+    # The Big Loop
+    while True:
+
+        # Carpark Counter
+        exit = distance(trigger_pin_1, echo_pin_1)
+        entry = distance(trigger_pin_2, echo_pin_2)
+        print ("Entry = %.1f cm" % entry)
+        print ("Exit = %.1f cm" % exit)
+
+        if entry < 7:
+            carpark += 1
+            time.sleep(1)
+        elif exit < 7:
+            carpark -= 1
+            time.sleep(1)
+        print(carpark)
+
+
+        time.sleep(0.1)
     message = input("Press enter to quit") # Run until someone presses enter
 
 finally:
