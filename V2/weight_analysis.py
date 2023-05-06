@@ -3,7 +3,7 @@ import numpy as np
 
 # Calculating the number of people from load cell readings
 def weight_to_people(readings):
-    print(readings)
+    # print(readings)
     pax = 0
     if readings >= 152000:
         pax = 0
