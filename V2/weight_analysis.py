@@ -5,9 +5,9 @@ import numpy as np
 def weight_to_people(readings):
     print(readings)
     pax = 0
-    if readings >= 154000:
+    if readings >= 152000:
         pax = 0
-    elif readings in range(148000, 154000):
+    elif readings in range(148000, 152000):
         pax = 1
     elif readings in range(144000, 148000):
         pax = 2

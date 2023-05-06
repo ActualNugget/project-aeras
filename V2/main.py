@@ -5,6 +5,7 @@
 
 import RPi.GPIO as GPIO
 import time
+from collections import defaultdict
 from led_function import led_function
 from weight_sensor import take_reading
 from weight_analysis import weight_to_people
@@ -31,9 +32,9 @@ echo_pin_2 = 2
 level = 1
 carpark = 0
 lift_pax = 0
+level_pax = defaultdict(lambda: 0)
 
 try:
-    GPIO.setmode(GPIO.BCM)
     led_function(level)
     # Lift Up
     def lift_up(channel):
@@ -59,7 +60,12 @@ try:
     def lift_close(channel):
         global level, lift_pax
         readings = take_reading()
-        lift_pax = weight_to_people(readings)
+        lift_pax_new = weight_to_people(readings)
+        delta = lift_pax_new - lift_pax
+        lift_pax = lift_pax_new
+        level_pax[level] -= delta
+        print(lift_pax, "delta: ", delta)
+
         print(lift_pax)
     GPIO.setup(lift_close_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
     GPIO.add_event_detect(lift_close_pin,GPIO.RISING,callback=lift_close, bouncetime=200)
@@ -85,7 +91,7 @@ try:
         elif exit < 7:
             carpark -= 1
             time.sleep(1)
-        print(carpark)
+        # print(carpark)
 
 
         time.sleep(0.1)
