@@ -39,17 +39,17 @@ def lift_close(channel):
 try:
     # Lift Up
     GPIO.setup(lift_up_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-    GPIO.add_event_detect(lift_up_pin,GPIO.RISING,callback=lift_up, bouncetime=200)
+    GPIO.add_event_detect(lift_up_pin, GPIO.RISING, callback=lift_up, bouncetime=200)
 
     # Lift Down
     GPIO.setup(lift_down_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-    GPIO.add_event_detect(lift_down_pin,GPIO.RISING,callback=lift_down, bouncetime=200)
+    GPIO.add_event_detect(lift_down_pin, GPIO.RISING, callback=lift_down, bouncetime=200)
 
     # Lift Close
     # GPIO.setup(lift_close_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
     # GPIO.add_event_detect(lift_close_pin,GPIO.RISING,callback=lift_close, bouncetime=200)
 
-    message = input("Press enter to quit\n\n") # Run until someone presses enter
+    message = input("Press enter to quit") # Run until someone presses enter
 
 finally:
     GPIO.cleanup()
