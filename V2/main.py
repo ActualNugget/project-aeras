@@ -5,6 +5,8 @@
 
 import RPi.GPIO as GPIO
 from led_function import led_function
+from weight_sensor import take_reading
+from weight_analysis import weight_to_people
 
 # GPIO Setup
 GPIO.setmode(GPIO.BCM)
@@ -48,11 +50,8 @@ try:
     GPIO.add_event_detect(lift_down_pin, GPIO.RISING, callback=lift_down, bouncetime=200)
 
     # Lift Close
-    def lift_close(channel):
-        global level
-        count()
-    # GPIO.setup(lift_close_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-    # GPIO.add_event_detect(lift_close_pin,GPIO.RISING,callback=lift_close, bouncetime=200)
+    GPIO.setup(lift_close_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+    GPIO.add_event_detect(lift_close_pin,GPIO.RISING,callback=lift_close, bouncetime=200)
 
     #set GPIO direction (IN / OUT)
     GPIO.setup(trigger_pin_1, GPIO.OUT)
