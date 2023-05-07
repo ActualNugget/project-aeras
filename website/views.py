@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template
-from V2.main import level_pax
-from V2.main import lift_pax
+# from V2.main import level_pax
+# from V2.main import lift_pax
 
 # Current floor data:
 level_pax = {
