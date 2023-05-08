@@ -1,10 +1,10 @@
 import RPi.GPIO as GPIO
 import time
 from collections import defaultdict
-from V2.led_function import led_function
-from V2.weight_sensor import take_reading
-from V2.weight_analysis import weight_to_people
-from V2.ultrasonic_dist import distance
+from led_function import led_function
+from weight_sensor import take_reading
+from weight_analysis import weight_to_people
+from ultrasonic_dist import distance
 
 def counter(publisher):
     global level, lift_pax, level_pax, counters
