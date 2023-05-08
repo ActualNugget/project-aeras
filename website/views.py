@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template
 
-from V2.main import level_pax
-from V2.main import lift_pax
+from V2.counter import level_pax
+from V2.counter import lift_pax
 
 # Current floor data:
 
