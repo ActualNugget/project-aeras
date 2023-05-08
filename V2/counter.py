@@ -1,8 +1,3 @@
-# TODO: count() people in lift now
-# TODO: Carpark sensor code
-# TODO: Carpark counter code
-
-
 import RPi.GPIO as GPIO
 import time
 from collections import defaultdict
@@ -96,7 +91,6 @@ try:
                 level_pax[1] = 0
             time.sleep(1)
         # print(carpark)
-
 
         time.sleep(0.1)
     message = input("Press enter to quit") # Run until someone presses enter
