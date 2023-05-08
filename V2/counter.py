@@ -90,19 +90,19 @@ def counter():
             # print ("Entry = %.1f cm" % entry)
             # print ("Exit = %.1f cm" % exit)
 
-            if entry < 5:
+            if entry < 7:
                 level_pax[1] += 1
-                print("Carpark: +1", level_pax[1])
+                print("Carpark: +1","%.1f cm" % entry, level_pax[1])
                 time.sleep(1)
-            elif exit < 5:
+            elif exit < 7:
                 level_pax[1] -= 1
-                print("Carpark: -1", level_pax[1])
+                print("Carpark: -1", "%.1f cm" % exit, level_pax[1])
                 if level_pax[1] < 0:
                     level_pax[1] = 0
                 time.sleep(1)
             # print(carpark)
             counters = {"lift": lift_pax, "levels": level_pax}
-            time.sleep(0.1)
+            time.sleep(0.5)
         # message = input("Press enter to quit") # Run until someone presses enter
 
     finally:
