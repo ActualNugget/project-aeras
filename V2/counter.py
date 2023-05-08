@@ -6,9 +6,9 @@ from weight_sensor import take_reading
 from weight_analysis import weight_to_people
 from ultrasonic_dist import distance
 
-def counter(publisher):
-    global level, lift_pax, level_pax, counters
-    GPIO.cleanup()
+def counter():
+    global level
+    # GPIO.cleanup()
     # GPIO Setup
     GPIO.setmode(GPIO.BCM)
     # Display
@@ -34,6 +34,10 @@ def counter(publisher):
 
 
     try:
+        level = 1
+        lift_pax = 0
+        level_pax = defaultdict(lambda: 0)
+        counters = {"lift": lift_pax, "levels": level_pax}
         led_function(level)
         # Lift Up
         def lift_up(channel):
@@ -67,7 +71,7 @@ def counter(publisher):
                     level_pax[level] = 0
             # print(lift_pax, "delta: ", delta)
             counters = {"lift": lift_pax, "levels": level_pax}
-            print("Levels:", level_pax, ", Lift:", lift_pax)
+            print(counters)
         GPIO.setup(lift_close_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
         GPIO.add_event_detect(lift_close_pin,GPIO.RISING,callback=lift_close, bouncetime=200)
 
@@ -98,7 +102,6 @@ def counter(publisher):
                 time.sleep(1)
             # print(carpark)
             counters = {"lift": lift_pax, "levels": level_pax}
-            publisher.notify(counters)
             time.sleep(0.1)
         # message = input("Press enter to quit") # Run until someone presses enter
 
