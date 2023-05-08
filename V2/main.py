@@ -9,7 +9,7 @@ def flask_app(app):
 
 
 app = create_app()
-# Init counters
+# Init counters - see inside counter.py
 level = 1
 lift_pax = 0
 level_pax = defaultdict(lambda: 0)

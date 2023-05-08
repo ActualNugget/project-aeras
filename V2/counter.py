@@ -7,7 +7,7 @@ from weight_analysis import weight_to_people
 from ultrasonic_dist import distance
 
 def counter():
-    global level
+    global level, lift_pax, level_pax, counters # Necessary for the button interrupts to work when run in main.py
     # GPIO.cleanup()
     # GPIO Setup
     GPIO.setmode(GPIO.BCM)
@@ -47,7 +47,7 @@ def counter():
                 led_function(level)
                 # print(level)
         GPIO.setup(lift_up_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-        GPIO.add_event_detect(lift_up_pin, GPIO.RISING, callback=lift_up, bouncetime=200)
+        GPIO.add_event_detect(lift_up_pin, GPIO.RISING, callback=lift_up, bouncetime=500)
 
         # Lift Down
         def lift_down(channel):
@@ -57,7 +57,7 @@ def counter():
                 led_function(level)
                 # print(level)
         GPIO.setup(lift_down_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-        GPIO.add_event_detect(lift_down_pin, GPIO.RISING, callback=lift_down, bouncetime=200)
+        GPIO.add_event_detect(lift_down_pin, GPIO.RISING, callback=lift_down, bouncetime=500)
 
         # Lift Close
         def lift_close(channel):
@@ -73,7 +73,7 @@ def counter():
             counters = {"lift": lift_pax, "levels": level_pax}
             print(counters)
         GPIO.setup(lift_close_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-        GPIO.add_event_detect(lift_close_pin,GPIO.RISING,callback=lift_close, bouncetime=200)
+        GPIO.add_event_detect(lift_close_pin,GPIO.RISING,callback=lift_close, bouncetime=500)
 
         #set GPIO direction (IN / OUT)
         GPIO.setup(trigger_pin_1, GPIO.OUT)
@@ -90,13 +90,13 @@ def counter():
             # print ("Entry = %.1f cm" % entry)
             # print ("Exit = %.1f cm" % exit)
 
-            if entry < 7:
+            if entry < 5:
                 level_pax[1] += 1
                 print("Carpark: +1", level_pax[1])
                 time.sleep(1)
-            elif exit < 7:
+            elif exit < 5:
                 level_pax[1] -= 1
-                print("Carpark: -1")
+                print("Carpark: -1", level_pax[1])
                 if level_pax[1] < 0:
                     level_pax[1] = 0
                 time.sleep(1)
