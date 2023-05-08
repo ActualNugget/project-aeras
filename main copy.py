@@ -6,11 +6,11 @@ publisher = Publisher()
 level = 1
 
 # # The counters
-def update_counters(publisher):
-    counter(publisher)
+# def update_counters(publisher):
+#     counter(publisher)
 
-update_thread = Thread(target=update_counters, args=(publisher, ))
-update_thread.start()
+# update_thread = Thread(target=update_counters(publisher))
+# update_thread.start()
 
 
 # Flask app
