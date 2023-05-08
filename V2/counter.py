@@ -7,7 +7,7 @@ from V2.weight_analysis import weight_to_people
 from V2.ultrasonic_dist import distance
 
 def counter(publisher):
-    global level
+    global level, lift_pax, level_pax, counters
     GPIO.cleanup()
     # GPIO Setup
     GPIO.setmode(GPIO.BCM)
@@ -34,7 +34,6 @@ def counter(publisher):
 
 
     try:
-        level = 1
         led_function(level)
         # Lift Up
         def lift_up(channel):
@@ -58,6 +57,7 @@ def counter(publisher):
 
         # Lift Close
         def lift_close(channel):
+            global level, lift_pax, level_pax, counters
             readings = take_reading()
             lift_pax_new = weight_to_people(readings)
             delta = lift_pax_new - lift_pax
@@ -66,6 +66,7 @@ def counter(publisher):
             if level_pax[level] < 0:
                     level_pax[level] = 0
             # print(lift_pax, "delta: ", delta)
+            counters = {"lift": lift_pax, "levels": level_pax}
             print("Levels:", level_pax, ", Lift:", lift_pax)
         GPIO.setup(lift_close_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
         GPIO.add_event_detect(lift_close_pin,GPIO.RISING,callback=lift_close, bouncetime=200)

@@ -1,11 +1,17 @@
 from website import create_app, Publisher
 from V2.counter import counter
 from threading import Thread
+from collections import defaultdict
 
 publisher = Publisher()
-level = 1
 
-# # The counters
+# Init counters
+level = 1
+lift_pax = 0
+level_pax = defaultdict(lambda: 0)
+counters = {"lift": lift_pax, "levels": level_pax}
+
+# Update counters
 def update_counters(publisher):
     counter(publisher)
 
