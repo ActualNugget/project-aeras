@@ -51,7 +51,7 @@ try:
         if level > 1:
             level -= 1
             led_function(level)
-            print(level)
+            # print(level)
     GPIO.setup(lift_down_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
     GPIO.add_event_detect(lift_down_pin, GPIO.RISING, callback=lift_down, bouncetime=200)
 
@@ -66,7 +66,7 @@ try:
         if level_pax[level] < 0:
                 level_pax[level] = 0
         # print(lift_pax, "delta: ", delta)
-        print("Levels:", level_pax)
+        print("Levels:", level_pax, ", Lift:", lift_pax)
     GPIO.setup(lift_close_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
     GPIO.add_event_detect(lift_close_pin,GPIO.RISING,callback=lift_close, bouncetime=200)
 
