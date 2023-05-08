@@ -1,5 +1,6 @@
 from website import create_app
 from counter import counter
+from collections import defaultdict
 from multiprocessing import Process
 import RPi.GPIO as GPIO
 
