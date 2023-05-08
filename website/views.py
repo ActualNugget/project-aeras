@@ -6,7 +6,14 @@ from flask import Blueprint, render_template
 # Current floor data:
 
 
-# lift_pax = 4
+lift_pax = 8
+level_pax = {1: 2,
+             2: 2,
+             3: 4,
+             4: 4,
+             5: 6}
+
+counters = {"lift": lift_pax, "levels": level_pax}
 
 views = Blueprint('views', __name__)
 
@@ -14,4 +21,4 @@ views = Blueprint('views', __name__)
 @views.route('/')
 def home():
 
-    return render_template("home.html", lift_pax=counters[lift], level_pax=counters[level])
+    return render_template("home.html", lift_pax=counters["lift"], level_pax=counters["levels"])

@@ -20,10 +20,9 @@ class Subscriber:
         setattr(self.app, self.variable_name, message)
 
 
-def create_app():
-    global publisher
+def create_app(publisher):
     app = Flask(__name__)
-    publisher = Publisher()
+    # publisher = Publisher()
     subscriber = Subscriber(app, 'counters')
     publisher.register(subscriber)
 

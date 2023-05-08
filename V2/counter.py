@@ -1,13 +1,13 @@
 import RPi.GPIO as GPIO
 import time
 from collections import defaultdict
-from led_function import led_function
-from weight_sensor import take_reading
-from weight_analysis import weight_to_people
-from ultrasonic_dist import distance
+from V2.led_function import led_function
+from V2.weight_sensor import take_reading
+from V2.weight_analysis import weight_to_people
+from V2.ultrasonic_dist import distance
 
 def counter(publisher):
-
+    GPIO.cleanup()
     # GPIO Setup
     GPIO.setmode(GPIO.BCM)
     # Display
@@ -31,7 +31,9 @@ def counter(publisher):
     level_pax = defaultdict(lambda: 0)
     counters = {"lift": lift_pax, "levels": level_pax}
 
+
     try:
+
         led_function(level)
         # Lift Up
         def lift_up(channel):
@@ -45,7 +47,6 @@ def counter(publisher):
 
         # Lift Down
         def lift_down(channel):
-            global level
             if level > 1:
                 level -= 1
                 led_function(level)
@@ -55,7 +56,6 @@ def counter(publisher):
 
         # Lift Close
         def lift_close(channel):
-            global level, lift_pax
             readings = take_reading()
             lift_pax_new = weight_to_people(readings)
             delta = lift_pax_new - lift_pax
@@ -85,7 +85,7 @@ def counter(publisher):
 
             if entry < 7:
                 level_pax[1] += 1
-                print("Carpark: +1")
+                print("Carpark: +1", level_pax[1])
                 time.sleep(1)
             elif exit < 7:
                 level_pax[1] -= 1
