@@ -7,33 +7,28 @@ from weight_analysis import weight_to_people
 from ultrasonic_dist import distance
 
 def counter():
-    global level, lift_pax, level_pax, counters # Necessary for the button interrupts to work when run in main.py
-    # GPIO.cleanup()
-    # GPIO Setup
-    GPIO.setmode(GPIO.BCM)
-    # Display
-    display_pins = [17,27,22,10,9,11,5]
-    # Weight
-    dout_pin = 13
-    pd_sck_pin = 6
-    # Buttons
-    lift_up_pin = 15
-    lift_down_pin = 18
-    lift_close_pin = 14
-    # Ultrasonic
-    trigger_pin_1 = 26
-    echo_pin_1 = 4
-    trigger_pin_2 = 3
-    echo_pin_2 = 2
-
-    # Init counters
-    level = 1
-    lift_pax = 0
-    level_pax = defaultdict(lambda: 0)
-    counters = {"lift": lift_pax, "levels": level_pax}
-
+    global level, counters # Necessary for the button interrupts to work when run in main.py
 
     try:
+        # GPIO.cleanup()
+        # GPIO Setup
+        GPIO.setmode(GPIO.BCM)
+        # Display
+        display_pins = [17,27,22,10,9,11,5]
+        # Weight
+        dout_pin = 13
+        pd_sck_pin = 6
+        # Buttons
+        lift_up_pin = 15
+        lift_down_pin = 18
+        lift_close_pin = 14
+        # Ultrasonic
+        trigger_pin_1 = 26
+        echo_pin_1 = 4
+        trigger_pin_2 = 3
+        echo_pin_2 = 2
+
+        # Init counters
         level = 1
         lift_pax = 0
         level_pax = defaultdict(lambda: 0)
@@ -66,9 +61,9 @@ def counter():
             lift_pax_new = weight_to_people(readings)
             delta = lift_pax_new - lift_pax
             lift_pax = lift_pax_new
-            level_pax[level] -= delta
-            if level_pax[level] < 0:
-                    level_pax[level] = 0
+            counters["levels"][level] -= delta
+            if counters["levels"][level] < 0:
+                    counters["levels"][level] = 0
             # print(lift_pax, "delta: ", delta)
             counters = {"lift": lift_pax, "levels": level_pax}
             print(counters)
@@ -91,19 +86,23 @@ def counter():
             # print ("Exit = %.1f cm" % exit)
 
             if entry < 7:
-                level_pax[1] += 1
-                print("Carpark: +1","%.1f cm" % entry, level_pax[1])
+                counters["levels"][1] += 1
+                print("Carpark: +1","%.1f cm" % entry, counters["levels"][1])
                 time.sleep(1)
             elif exit < 7:
-                level_pax[1] -= 1
-                print("Carpark: -1", "%.1f cm" % exit, level_pax[1])
-                if level_pax[1] < 0:
-                    level_pax[1] = 0
+                counters["levels"][1] -= 1
+                print("Carpark: -1", "%.1f cm" % exit, counters["levels"][1])
+                if counters["levels"][1] < 0:
+                    counters["levels"][1] = 0
                 time.sleep(1)
             # print(carpark)
-            counters = {"lift": lift_pax, "levels": level_pax}
+            counters = {"lift": lift_pax, "levels": counters["levels"]}
             time.sleep(0.5)
         # message = input("Press enter to quit") # Run until someone presses enter
 
     finally:
         GPIO.cleanup()
+
+if __name__ == '__main__':
+
+    counter()
