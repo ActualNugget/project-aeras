@@ -66,8 +66,8 @@ def counter():
             delta = lift_pax_new - counters["lift"]
             counters["lift"] = lift_pax_new
             counters["levels"][level] = counters["levels"][level] - delta
-            # if counters["levels"][level] < 0:
-            #     counters["levels"][level] = 0
+            if counters["levels"][level] < 0:
+                counters["levels"][level] = 0
             # print(lift_pax, "delta: ", delta)
             print(counters)
         GPIO.setup(lift_close_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
@@ -95,6 +95,8 @@ def counter():
             if entry < 7:
                 counters["levels"][1] += 1
                 print("Carpark: +1", "%.1f cm" % entry, counters["levels"][1])
+                if counters["levels"][1] < 0:
+                    counters["levels"][1] = 0
                 time.sleep(1)
             elif exit < 7:
                 counters["levels"][1] -= 1
