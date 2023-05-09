@@ -3,6 +3,7 @@ from counter import counter
 from collections import defaultdict
 from multiprocessing import Process
 
+
 def flask_app(app):
     app.run(debug=True)
 
@@ -21,4 +22,3 @@ if __name__ == '__main__':
 
     count_proc = Process(target=counter)
     count_proc.start()
-
