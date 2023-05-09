@@ -6,8 +6,9 @@ from weight_sensor import take_reading
 from weight_analysis import weight_to_people
 from ultrasonic_dist import distance
 
-def counter():
-    global level, counters # Necessary for the button interrupts to work when run in main.py
+
+def counter_fake():
+    global level, counters  # Necessary for the button interrupts to work when run in main.py
 
     try:
 
@@ -39,6 +40,7 @@ def counter():
             time.sleep(10)
     finally:
         print("cleanup!")
+
 
 if __name__ == '__main__':
 

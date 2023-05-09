@@ -1,5 +1,6 @@
 from website import create_app
 from counter import counter
+from counter_fake import counter_fake
 from collections import defaultdict
 from flask import Flask, Blueprint, render_template
 # from multiprocessing import Process
@@ -42,7 +43,7 @@ def home():
     return render_template('home.html', lift_pax=lift_pax, level_pax=level_pax)
 
 
-gen_total = counter()  # initate the function out of the scope of update route
+gen_total = counter_fake()  # initate the function out of the scope of update route
 
 
 @app.get("/update")
