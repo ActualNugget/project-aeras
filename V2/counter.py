@@ -1,5 +1,6 @@
 import RPi.GPIO as GPIO
 import time
+import numpy as np
 from collections import defaultdict
 from led_function import led_function
 from weight_sensor import take_reading
@@ -27,6 +28,8 @@ def counter():
         echo_pin_1 = 4
         trigger_pin_2 = 3
         echo_pin_2 = 2
+        # Ultrasonic Trigger Distance
+        trigger_distance = 7
 
         # Init counters
         level = 1
@@ -87,20 +90,26 @@ def counter():
         while True:
 
             # Carpark Counter
-            exit = distance(trigger_pin_1, echo_pin_1)
-            entry = distance(trigger_pin_2, echo_pin_2)
+            leave = []
+            enter = []
+            for i in range(3):
+                leave.append(distance(trigger_pin_1, echo_pin_1))
+                enter.append(distance(trigger_pin_2, echo_pin_2))
+
             # print ("Entry = %.1f cm" % entry)
             # print ("Exit = %.1f cm" % exit)
 
-            if entry < 7:
+            if np.median(enter) < trigger_distance:
                 counters["levels"][1] += 1
-                print("Carpark: +1", "%.1f cm" % entry, counters["levels"][1])
+                print("Carpark: +1", "%.1f cm" %
+                      np.median(enter), counters["levels"][1])
                 if counters["levels"][1] < 0:
                     counters["levels"][1] = 0
                 time.sleep(1)
-            elif exit < 7:
+            elif np.median(leave) < trigger_distance:
                 counters["levels"][1] -= 1
-                print("Carpark: -1", "%.1f cm" % exit, counters["levels"][1])
+                print("Carpark: -1", "%.1f cm" %
+                      np.median(leave), counters["levels"][1])
                 if counters["levels"][1] < 0:
                     counters["levels"][1] = 0
                 time.sleep(1)
