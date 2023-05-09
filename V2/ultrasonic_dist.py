@@ -1,18 +1,18 @@
-#long and short distances -> triggers the counter 
+# long and short distances -> triggers the counter
 import RPi.GPIO as GPIO
 import time
- 
-#GPIO Mode (BOARD / BCM)
+
+# GPIO Mode (BOARD / BCM)
 GPIO.setmode(GPIO.BCM)
- 
-#set GPIO Pins
+
+# set GPIO Pins
 # trigger_pin_1 = 26
 # echo_pin_1 = 4
 # trigger_pin_2 = 3
 # echo_pin_2 = 2
 
- 
-#set GPIO direction (IN / OUT)
+
+# set GPIO direction (IN / OUT)
 # GPIO.setup(trigger_pin_1, GPIO.OUT)
 # GPIO.setup(trigger_pin_2, GPIO.OUT)
 # GPIO.setup(echo_pin_1, GPIO.IN)
@@ -20,38 +20,43 @@ GPIO.setmode(GPIO.BCM)
 
 def distance(GPIO_TRIGGER, GPIO_ECHO):
     # Reset Trigger
-    # print("sleepin")
-    # GPIO.output(GPIO_TRIGGER, 0)
-    # time.sleep(2)
-    # GPIO.output(GPIO_TRIGGER, 1)
+
+    GPIO.output(GPIO_TRIGGER, 0)
+    time.sleep(0.000005)
+    GPIO.output(GPIO_TRIGGER, 1)
 
     # set Trigger to HIGH
-    GPIO.output(GPIO_TRIGGER, True)
- 
+    GPIO.output(GPIO_TRIGGER, 1)
+
     # set Trigger after 0.01ms to LOW
     time.sleep(0.00001)
-    GPIO.output(GPIO_TRIGGER, False)
- 
+    GPIO.output(GPIO_TRIGGER, 0)
+
     StartTime = time.time()
     StopTime = time.time()
+    echo_status_counter = 0
 
     # save StartTime
     while GPIO.input(GPIO_ECHO) == 0:
-        StartTime = time.time()
+        if echo_status_counter < 1000:
+            StartTime = time.time()
+            echo_status_counter += 1
+        else:
+            raise SystemError("Echo pulse was not received")
 
     # save time of arrival
     while GPIO.input(GPIO_ECHO) == 1:
         StopTime = time.time()
- 
+
     # time difference between start and arrival
     TimeElapsed = StopTime - StartTime
 
     # multiply with the sonic speed (34300 cm/s)
     # and divide by 2, because there and back
     distance = (TimeElapsed * 34300) / 2
- 
+
     return distance
- 
+
 # try:
 #     count = 0
 #     while True:

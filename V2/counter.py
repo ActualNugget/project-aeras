@@ -29,7 +29,7 @@ def counter():
         trigger_pin_2 = 3
         echo_pin_2 = 2
         # Ultrasonic Trigger Distance
-        trigger_distance = 7
+        trigger_distance = 8
 
         # Init counters
         level = 1
@@ -85,36 +85,45 @@ def counter():
         GPIO.setup(trigger_pin_2, GPIO.OUT)
         GPIO.setup(echo_pin_1, GPIO.IN)
         GPIO.setup(echo_pin_2, GPIO.IN)
+        loop_count = 0
 
         # The Big Loop
         while True:
-
+            # print("loop", loop_count)
             # Carpark Counter
             leave = []
             enter = []
             for i in range(3):
-                leave.append(distance(trigger_pin_1, echo_pin_1))
-                enter.append(distance(trigger_pin_2, echo_pin_2))
+                try:
+                    leave.append(distance(trigger_pin_1, echo_pin_1))
+                except SystemError:
+                    leave.append(15)
+                try:
+                    enter.append(distance(trigger_pin_2, echo_pin_2))
+                except SystemError:
+                    enter.append(15)
 
-            # print ("Entry = %.1f cm" % entry)
-            # print ("Exit = %.1f cm" % exit)
+            # print(np.median(enter), np.median(exit))
 
             if np.median(enter) < trigger_distance:
                 counters["levels"][1] += 1
-                print("Carpark: +1", "%.1f cm" %
-                      np.median(enter), counters["levels"][1])
                 if counters["levels"][1] < 0:
                     counters["levels"][1] = 0
+                print("Carpark: +1", "%.1f cm" %
+                      np.median(enter), counters["levels"][1])
+
                 time.sleep(1)
             elif np.median(leave) < trigger_distance:
                 counters["levels"][1] -= 1
-                print("Carpark: -1", "%.1f cm" %
-                      np.median(leave), counters["levels"][1])
                 if counters["levels"][1] < 0:
                     counters["levels"][1] = 0
+                print("Carpark: -1", "%.1f cm" %
+                      np.median(leave), counters["levels"][1])
                 time.sleep(1)
             # print(carpark)
+            # loop_count += 1
             time.sleep(0.1)
+            yield counters
         # message = input("Press enter to quit") # Run until someone presses enter
 
     finally:
