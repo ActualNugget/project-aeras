@@ -25,6 +25,7 @@ level_pax = {1: 2,
              5: 0}
 counters = {"lift": lift_pax, "levels": level_pax}
 
+# TODO: home still can't access variables morphed in update
 
 # views = Blueprint('views', __name__)
 
