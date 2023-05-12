@@ -1,10 +1,11 @@
 # import RPi.GPIO as GPIO
 import time
+import random
 from collections import defaultdict
-from led_function import led_function
-from weight_sensor import take_reading
-from weight_analysis import weight_to_people
-from ultrasonic_dist import distance
+# from led_function import led_function
+# from weight_sensor import take_reading
+# from weight_analysis import weight_to_people
+# from ultrasonic_dist import distance
 
 
 def counter_fake():
@@ -14,34 +15,15 @@ def counter_fake():
 
         # The Big Loop
         while True:
+            x = random.randint(1, 3)
+            counters = {"lift": x, "levels": {1: x, 2: x, 3: x, 4: x, 5: x}}
 
-            counters = {"lift": 1,
-                        "levels": {1: 1,
-                                   2: 1,
-                                   3: 1,
-                                   4: 1,
-                                   5: 1}}
-            time.sleep(10)
+            yield counters
 
-            counters = {"lift": 2,
-                        "levels": {1: 2,
-                                   2: 2,
-                                   3: 2,
-                                   4: 2,
-                                   5: 2}}
-            time.sleep(10)
-
-            counters = {"lift": 3,
-                        "levels": {1: 3,
-                                   2: 3,
-                                   3: 3,
-                                   4: 3,
-                                   5: 3}}
-            time.sleep(10)
     finally:
         print("cleanup!")
 
 
 if __name__ == '__main__':
 
-    counter()
+    counter_fake()
