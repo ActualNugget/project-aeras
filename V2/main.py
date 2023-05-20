@@ -38,7 +38,8 @@ counters = {"lift": lift_pax, "levels": level_pax}
 
 @app.route("/")
 def home():
-    return render_template('home.html', counters=counters, lift_pax=lift_pax, level_pax=level_pax)
+    global gen_total
+    return render_template('home.html', counters=counters, lift_pax=lift_pax, level_pax=level_pax, gen_total=next(gen_total))
 
 
 gen_total = counter_fake()  # initate the function out of the scope of update route
