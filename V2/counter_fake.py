@@ -16,7 +16,14 @@ def counter_fake():
         # The Big Loop
         while True:
             x = random.randint(1, 3)
-            counters = {"lift": x, "levels": {1: x, 2: x, 3: x, 4: x, 5: x}}
+            counters = {"lift": x, "levels": {
+                1: random.randint(1, 3),
+                2: random.randint(1, 3), 
+                3: random.randint(1, 3), 
+                4: random.randint(1, 3), 
+                5: random.randint(1, 3),
+                }
+                }
 
             yield counters
 
