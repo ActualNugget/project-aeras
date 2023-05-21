@@ -89,40 +89,41 @@ def counter():
 
         # The Big Loop
         while True:
-            # print("loop", loop_count)
-            # Carpark Counter
-            leave = []
-            enter = []
-            for i in range(3):
-                try:
-                    leave.append(distance(trigger_pin_1, echo_pin_1))
-                except SystemError:
-                    leave.append(15)
-                try:
-                    enter.append(distance(trigger_pin_2, echo_pin_2))
-                except SystemError:
-                    enter.append(15)
+            while True:
+                # print("loop", loop_count)
+                # Carpark Counter
+                leave = []
+                enter = []
+                for i in range(3):
+                    try:
+                        leave.append(distance(trigger_pin_1, echo_pin_1))
+                    except SystemError:
+                        leave.append(15)
+                    try:
+                        enter.append(distance(trigger_pin_2, echo_pin_2))
+                    except SystemError:
+                        enter.append(15)
 
-            # print(np.median(enter), np.median(exit))
+                # print(np.median(enter), np.median(exit))
 
-            if np.median(enter) < trigger_distance:
-                counters["levels"][1] += 1
-                if counters["levels"][1] < 0:
-                    counters["levels"][1] = 0
-                print("Carpark: +1", "%.1f cm" %
-                      np.median(enter), counters["levels"][1])
+                if np.median(enter) < trigger_distance:
+                    counters["levels"][1] += 1
+                    if counters["levels"][1] < 0:
+                        counters["levels"][1] = 0
+                    print("Carpark: +1", "%.1f cm" %
+                          np.median(enter), counters["levels"][1])
 
-                time.sleep(1)
-            elif np.median(leave) < trigger_distance:
-                counters["levels"][1] -= 1
-                if counters["levels"][1] < 0:
-                    counters["levels"][1] = 0
-                print("Carpark: -1", "%.1f cm" %
-                      np.median(leave), counters["levels"][1])
-                time.sleep(1)
-            # print(carpark)
-            # loop_count += 1
-            time.sleep(0.1)
+                    time.sleep(1)
+                elif np.median(leave) < trigger_distance:
+                    counters["levels"][1] -= 1
+                    if counters["levels"][1] < 0:
+                        counters["levels"][1] = 0
+                    print("Carpark: -1", "%.1f cm" %
+                          np.median(leave), counters["levels"][1])
+                    time.sleep(1)
+                # print(carpark)
+                # loop_count += 1
+                time.sleep(0.1)
             yield counters
         # message = input("Press enter to quit") # Run until someone presses enter
 

@@ -1,10 +1,11 @@
 # import RPi.GPIO as GPIO
 import time
+import random
 from collections import defaultdict
-from led_function import led_function
-from weight_sensor import take_reading
-from weight_analysis import weight_to_people
-from ultrasonic_dist import distance
+# from led_function import led_function
+# from weight_sensor import take_reading
+# from weight_analysis import weight_to_people
+# from ultrasonic_dist import distance
 
 
 def counter_fake():
@@ -14,30 +15,41 @@ def counter_fake():
 
         # The Big Loop
         while True:
+            x = random.randint(1, 3)
+            counters = {
+                "lift": x,
+                "levels": {
+                    1: random.randint(1, 3),
+                    2: random.randint(1, 3), 
+                    3: random.randint(1, 3), 
+                    4: random.randint(1, 3), 
+                    5: random.randint(1, 3),
+                },
+                "airflow": {
+                    "total": 80,
+                    1: 0,
+                    2: 0,
+                    3: 0,
+                    4: 0,
+                    5: 0,
+                    "outdoor": 80,
+                },
+                }
+                # Set the airflow values based on the levels
+            for level, value in counters["levels"].items():
+                if level in [1, 2, 3, 4, 5]:
+                    if value == 1:
+                        counters["airflow"][level] = 20
+                    elif value == 2:
+                        counters["airflow"][level] = 60
+                    elif value == 3:
+                        counters["airflow"][level] = 80
+            
+            for level, value in counters["airflow"].items():
+                if level in ["total"]:
+                    counters["airflow"]["total"] = (counters["airflow"][1] + counters["airflow"][2] + counters["airflow"][3] + counters["airflow"][4] + counters["airflow"][5])/5
+            yield counters
 
-            counters = {"lift": 1,
-                        "levels": {1: 1,
-                                   2: 1,
-                                   3: 1,
-                                   4: 1,
-                                   5: 1}}
-            time.sleep(10)
-
-            counters = {"lift": 2,
-                        "levels": {1: 2,
-                                   2: 2,
-                                   3: 2,
-                                   4: 2,
-                                   5: 2}}
-            time.sleep(10)
-
-            counters = {"lift": 3,
-                        "levels": {1: 3,
-                                   2: 3,
-                                   3: 3,
-                                   4: 3,
-                                   5: 3}}
-            time.sleep(10)
     finally:
         print("cleanup!")
 
