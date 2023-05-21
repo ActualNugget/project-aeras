@@ -55,7 +55,7 @@ def update():
 
 if __name__ == '__main__':
     app.run(debug=True)
-    # app.run(debug=True, use_reloader=False)
+    # app.run(debug=True, use_reloader=False) # Using this instead of previous line fixes double run bug
     # flask_proc = Process(target=flask_app, args=(app,))
     # flask_proc.start()
 
