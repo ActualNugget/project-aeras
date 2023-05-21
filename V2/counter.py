@@ -6,6 +6,7 @@ from led_function import led_function
 from weight_sensor import take_reading
 from weight_analysis import weight_to_people
 from ultrasonic_dist import distance
+from threading import Thread
 
 
 def counter():
@@ -35,7 +36,18 @@ def counter():
         level = 1
         lift_pax = 0
         level_pax = defaultdict(lambda: 0)
-        counters = {"lift": lift_pax, "levels": level_pax}
+        counters = {"lift": lift_pax,
+                    "levels": level_pax,
+                    "airflow": {
+                        "total": 00,
+                        1: 0,
+                        2: 0,
+                        3: 0,
+                        4: 0,
+                        5: 0,
+                        "outdoor": 00,
+                    },
+                    }
         led_function(level)
 
         # Lift Up
@@ -87,8 +99,9 @@ def counter():
         GPIO.setup(echo_pin_2, GPIO.IN)
         loop_count = 0
 
-        # The Big Loop
-        while True:
+        # Carpark Loop
+        def carpark():
+            global counters
             while True:
                 # print("loop", loop_count)
                 # Carpark Counter
@@ -112,8 +125,8 @@ def counter():
                         counters["levels"][1] = 0
                     print("Carpark: +1", "%.1f cm" %
                           np.median(enter), counters["levels"][1])
-
                     time.sleep(1)
+
                 elif np.median(leave) < trigger_distance:
                     counters["levels"][1] -= 1
                     if counters["levels"][1] < 0:
@@ -121,9 +134,36 @@ def counter():
                     print("Carpark: -1", "%.1f cm" %
                           np.median(leave), counters["levels"][1])
                     time.sleep(1)
-                # print(carpark)
-                # loop_count += 1
+
                 time.sleep(0.1)
+
+        thread1 = Thread(target=carpark)
+        thread1.start()
+
+        while True:
+
+            total_pax = counters["lift"]
+            # Set the airflow values based on the levels
+            for level, value in counters["levels"].items():
+                total_pax += value
+                if level in [1, 2, 3, 4, 5]:
+                    if value == 1:
+                        counters["airflow"][level] = 20
+                    elif value == 2:
+                        counters["airflow"][level] = 60
+                    elif value == 3:
+                        counters["airflow"][level] = 80
+
+            for level, value in counters["airflow"].items():
+                if level in ["total"]:
+                    counters["airflow"]["total"] = (counters["airflow"][1] + counters["airflow"][2] +
+                                                    counters["airflow"][3] + counters["airflow"][4] + counters["airflow"][5])/5
+            if total_pax < 2:
+                counters["airflow"]["outdoor"] = 50
+            elif total_pax == 2:
+                counters["airflow"]["outdoor"] = 60
+            elif total_pax > 2:
+                counters["airflow"]["outdoor"] = 90
             yield counters
         # message = input("Press enter to quit") # Run until someone presses enter
 

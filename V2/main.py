@@ -1,5 +1,5 @@
 from website import create_app
-# from counter import counter
+from counter import counter
 from counter_fake import counter_fake
 from collections import defaultdict
 from flask import Flask, Blueprint, render_template
@@ -42,7 +42,7 @@ def home():
     return render_template('home.html', counters=counters, lift_pax=lift_pax, level_pax=level_pax, gen_total=next(gen_total))
 
 
-gen_total = counter_fake()  # initate the function out of the scope of update route
+gen_total = counter()  # initate the function out of the scope of update route
 
 
 @app.get("/update")
@@ -54,8 +54,9 @@ def update():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
-    # app.run(debug=True, use_reloader=False) # Using this instead of previous line fixes double run bug
+    # app.run(debug=True)
+    # Using this instead of previous line fixes double run bug
+    app.run(debug=True, use_reloader=False)
     # flask_proc = Process(target=flask_app, args=(app,))
     # flask_proc.start()
 
