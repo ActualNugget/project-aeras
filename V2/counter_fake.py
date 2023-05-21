@@ -44,7 +44,10 @@ def counter_fake():
                         counters["airflow"][level] = 60
                     elif value == 3:
                         counters["airflow"][level] = 80
-
+            
+            for level, value in counters["airflow"].items():
+                if level in ["total"]:
+                    counters["airflow"]["total"] = (counters["airflow"][1] + counters["airflow"][2] + counters["airflow"][3] + counters["airflow"][4] + counters["airflow"][5])/5
             yield counters
 
     finally:
