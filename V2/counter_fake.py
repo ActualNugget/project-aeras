@@ -44,4 +44,4 @@ def counter_fake():
 
 if __name__ == '__main__':
 
-    counter()
+    counter_fake()
