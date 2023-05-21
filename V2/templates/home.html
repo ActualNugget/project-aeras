@@ -5,27 +5,26 @@
     <div class="row">
         <div class="col-sm">
             <div class="container">
-                <div class="row row-cols-1 row-cols-md-1 g-4">
-                  <div class="container">
-                    <div class="row">
-                      <div class="col">
-                        <div class="card">
-                          <div class="card-body">
-                            <div class="row">
-                              <div class="col-md-8">
-                                <h5 class="card-title">Level 5</h5>
-                                <div class="alert alert-primary" role="alert">
-                                  Occupancy: {{gen_total["levels"][5]}}
-                                </div>
+              <div class="row row-cols-1 row-cols-md-1 g-4">
+                <div class="container">
+                  <div class="row">
+                    <div class="col">
+                      <div class="card">
+                        <div class="card-body">
+                          <div class="row">
+                            <div class="col-md-8">
+                              <h5 class="card-title">Level 5</h5>
+                              <div class="alert alert-primary" role="alert">
+                                Occupancy: {{gen_total["levels"][5]}}
                               </div>
-                              <div class="col-md-4">
-                                <div class="card p-3">
-                                  <div>
-                                    <h6>Air Flow Rate</h6>
-                                    <h5>53%<span></span></h5>
-                                    <div class="progress">
-                                      <div class="progress-bar bg-c-red" style="width: 25%"></div>
-                                    </div>
+                            </div>
+                            <div class="col-md-4">
+                              <div class="card p-3">
+                                <div>
+                                  <h6>Air Flow Rate</h6>
+                                  <h5>{{ gen_total["airflow"][5] }}%<span></span></h5>
+                                  <div class="progress">
+                                    <div class="progress-bar bg-c-red" style="width: {{ gen_total['airflow'][5] }}%"></div>
                                   </div>
                                 </div>
                               </div>
@@ -35,6 +34,7 @@
                       </div>
                     </div>
                   </div>
+                </div>
                 <div class="container">
                   <div class="row">
                     <div class="col">
@@ -51,9 +51,9 @@
                               <div class="card p-3">
                                 <div>
                                   <h6>Air Flow Rate</h6>
-                                  <h5>53%<span></span></h5>
+                                  <h5>{{ gen_total['airflow'][4] }}%<span></span></h5>
                                   <div class="progress">
-                                    <div class="progress-bar bg-c-red" style="width: 25%"></div>
+                                    <div class="progress-bar bg-c-red" style="width: {{ gen_total['airflow'][4] }}%"></div>
                                   </div>
                                 </div>
                               </div>
@@ -80,9 +80,9 @@
                               <div class="card p-3">
                                 <div>
                                   <h6>Air Flow Rate</h6>
-                                  <h5>53%<span></span></h5>
+                                  <h5>{{ gen_total['airflow'][3] }}%<span></span></h5>
                                   <div class="progress">
-                                    <div class="progress-bar bg-c-red" style="width: 25%"></div>
+                                    <div class="progress-bar bg-c-red" style="width: {{ gen_total['airflow'][3] }}%"></div>
                                   </div>
                                 </div>
                               </div>
@@ -109,9 +109,9 @@
                               <div class="card p-3">
                                 <div>
                                   <h6>Air Flow Rate</h6>
-                                  <h5>53%<span></span></h5>
+                                  <h5>{{ gen_total['airflow'][2] }}%<span></span></h5>
                                   <div class="progress">
-                                    <div class="progress-bar bg-c-red" style="width: 25%"></div>
+                                    <div class="progress-bar bg-c-red" style="width: {{ gen_total['airflow'][2] }}%"></div>
                                   </div>
                                 </div>
                               </div>
@@ -138,9 +138,9 @@
                               <div class="card p-3">
                                 <div>
                                   <h6>Air Flow Rate</h6>
-                                  <h5>53%<span></span></h5>
+                                  <h5>{{ gen_total['airflow'][1] }}%<span></span></h5>
                                   <div class="progress">
-                                    <div class="progress-bar bg-c-red" style="width: 25%"></div>
+                                    <div class="progress-bar bg-c-red" style="width: {{ gen_total['airflow'][1] }}%"></div>
                                   </div>
                                 </div>
                               </div>
@@ -168,9 +168,9 @@
                 <div class="card p-3">
                   <div>
                     <h6>Total Air Flow</h6>
-                    <h5>53%<span></span></h5>
+                    <h5>{{ gen_total['airflow']['total'] }}%<span></span></h5>
                     <div class="progress">
-                      <div class="progress-bar bg-c-red" style="width: 25%"></div>
+                      <div class="progress-bar bg-c-red" style="width: {{ gen_total['airflow']['total'] }}%"></div>
                     </div>
                   </div>
                 </div>
@@ -179,9 +179,9 @@
                 <div class="card p-3">
                   <div>
                     <h6>Outdoor Air Intake</h6>
-                    <h5>53%<span></span></h5>
+                    <h5>{{ gen_total['airflow']['outdoor'] }}%<span></span></h5>
                     <div class="progress">
-                      <div class="progress-bar bg-c-red" style="width: 25%"></div>
+                      <div class="progress-bar bg-c-red" style="width: {{ gen_total['airflow']['outdoor'] }}%"></div>
                     </div>
                   </div>
                 </div>

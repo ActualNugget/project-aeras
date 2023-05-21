@@ -25,8 +25,25 @@ def counter_fake():
                     4: random.randint(1, 3), 
                     5: random.randint(1, 3),
                 },
-                "air_flow": {}
+                "airflow": {
+                    "total": 80,
+                    1: 0,
+                    2: 0,
+                    3: 0,
+                    4: 0,
+                    5: 0,
+                    "outdoor": 80,
+                },
                 }
+                # Set the airflow values based on the levels
+            for level, value in counters["levels"].items():
+                if level in [1, 2, 3, 4, 5]:
+                    if value == 1:
+                        counters["airflow"][level] = 20
+                    elif value == 2:
+                        counters["airflow"][level] = 60
+                    elif value == 3:
+                        counters["airflow"][level] = 80
 
             yield counters
 
